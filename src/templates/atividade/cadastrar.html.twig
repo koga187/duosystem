@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+    <div class="col-xs-12">
+        <h1>Cadastro Tarefa</h1>
+        <form id="formListaAtividade" action="{% if taskData.idtask is defined %}{{ url('salvarAlteracaoAtividade', {'id': taskData.idtask}) }}{% else %}{{ url('salvarAtividade') }}{% endif %}" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="form-group row">
+                <div class="col-xs-12 col-md-6">
+                    <label for="task_name">Nome:</label>
+                    <input maxlength="255" name="task_name" id="task_name" required class="form-control" value="{% if taskData.name is defined %}{{ taskData.name }}{% endif %}" {{ disabled }}/>
+                    <input maxlength="100" type="hidden" name="task_id" id="task_id" class="form-control" value="{% if taskData.idtask is defined %}{{ taskData.idtask }}{% endif %}  {{ disabled }}"/>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-3">
+                    <label for="task_dt_begin">Data Inicio:</label>
+                    <input type="date" maxlength="10" name="task_dt_begin" id="task_dt_begin" required class="form-control" placeholder="dd/mm/yyyy" value="{% if taskData.dt_begin is defined %}{{ taskData.dt_begin }}{% endif %}" {{ disabled }}/>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-3">
+                    <label for="task_dt_end">Data Fim:</label>
+                    <input type="date" maxlength="10" name="task_dt_end" id="task_dt_end" class="form-control" placeholder="dd/mm/yyyy" value="{% if taskData.dt_end is defined %}{{ taskData.dt_end }}{% endif %}"  {{ disabled }}/>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-3">
+                    <label for="task_situation">Situação:</label>
+                    <select maxlength="10" name="task_situation" id="task_situation" required class="form-control"  {{ disabled }} >
+                        {% for situation in taskSituation %}
+                            <option value="{{situation.id}}" {% if taskData.situation is defined %}{% if taskData.situation == situation.id %}selected{% endif %}{% endif %}>{{situation.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-3">
+                    <label for="task_status">Status:</label>
+                    <select maxlength="10" name="task_status" id="task_status" required class="form-control"  {{ disabled }} >
+                        {% for status in taskStatus %}
+                            <option value="{{status.idtaskstatus}}" {% if taskData.task_status_idtask is defined %}{% if taskData.task_status_idtask == status.idtaskstatus %}selected{% endif %}{% endif %}>{{status.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xs-12">
+                    <label for="task_description">Descrição:</label>
+                    <textarea maxlength="600" name="task_description" id="task_description" required class="form-control"  {{ disabled }}>{% if taskData.description is defined %}{{ taskData.description }}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="btn-group-lg col-xs-12 text-right row">
+                <input type="submit" value="Salvar" id="saveTask" class="btn btn-success"  {{ disabled }}>
+            </div>
+        </form>
+    </div>
+{% endblock body %}
+{% block javascript %}
+    <script type="application/javascript" src="http://{{ app.request_context.host }}/js/formAtividade.js"></script>
+{% endblock javascript %}

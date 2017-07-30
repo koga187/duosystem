@@ -1,0 +1,78 @@
+{% extends 'layout.html.twig' %}
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="http://{{ app.request_context.host }}/css/listaAtividade.css">
+{% endblock stylesheet %}
+{% block body %}
+    <form name="filtroTaskList" enctype="application/x-www-form-urlencoded" action="{{ url('listaAtividade', {'page' : pageNow}) }}", method="get">
+        <div class="col-xs-12 form-group">
+            <div class="col-xs-12 col-md-6">
+                <label for="taskStatusFilter">Status</label>
+                <select name="taskStatusFilter" id="taskStatusFilter" class="form-control">
+                    <option value="">Selecione para filtrar</option>
+                    {% for idStatus, status in taskStatus %}
+                        <option value="{{idStatus}}" {% if taskStatusFilter is defined %}{% if taskStatusFilter is not empty and taskStatusFilter == idStatus %}selected{% endif %}{% endif %}>{{status}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <label for="taskSituationFilter">Situação</label>
+                <select name="taskSituationFilter" id="taskSituationFilter" class="form-control">
+                    <option value="">Selecione para filtrar</option>
+                    {% for idSituation, situation in taskSituation %}
+                        <option value="{{idSituation}}" {% if taskSituationFilter is defined %}{% if taskSituationFilter is not empty and taskSituationFilter == idSituation %}selected{% endif %}{% endif %}>{{situation}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-12 text-right row">
+            <div class="btn-group-lg">
+                <input type="submit" value="Filtrar" class="btn btn-default">
+            </div>
+        </div>
+    </form>
+    <div class="row col-xs-12">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Data Inicio</th>
+                <th>Data Fim</th>
+                <th>Status</th>
+                <th>Situação</th>
+                <th>...</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in taskList %}
+                <tr {% if task.task_status_idtask == 4 %} class="concluido" {% endif %}>
+                    <td>{{ task.idtask }}</td>
+                    <td class="truncate-ellipsis">{{ task.name }}</td>
+                    <td class="truncate-ellipsis">{{ task.description }}</td>
+                    <td>{{ task.dt_begin }}</td>
+                    <td>{{ task.dt_end }}</td>
+                    <td>{{ taskStatus[task.task_status_idtask] }}</td>
+                    <td>{{ taskSituation[task.situation] }}</td>
+                    <td><a href="{{ url('alterarAtividade', {'id' : task.idtask}) }}">Editar/Visualizar</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <div class="pagination">
+        Pagina:
+        {% for page in 1..totalPages %}
+            <a href="{{ url('listaAtividade', {'page' : page}) }}?taskStatusFilter={{ taskStatusFilter }}&taskSituationFilter={{ taskSituationFilter }}">{{ page }}</a>
+        {% endfor %}
+        Total de tarefas: {{ total }}
+    </div>
+    <div class="col-xs-12 text-right row">
+        <div class="btn-group-lg">
+            <a href="{{ url('cadastroAtividade') }}">
+            <input type="button" value="Cadastrar Tarefa" class="btn btn-default">
+            </a>
+        </div>
+    </div>
+{% endblock body %}

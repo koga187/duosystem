@@ -1,0 +1,51 @@
+<html>
+<head><title>{% block sub_title '' %}{% block title 'Duosystem' %}</title>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="http://{{ app.request_context.host }}/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://{{ app.request_context.host }}/bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="http://{{ app.request_context.host }}/css/style.css">
+    {% block stylesheet %}{% endblock stylesheet %}
+</head>
+<body>
+<div id="banner">
+    <div>
+        <ul class="nav nav-tabs">
+            <li><a class="" href="http://{{ app.request_context.host }}/">Boas Vindas</a></li>
+            <li><a class="" href="{{ url('listaAtividade', {'page' : 1}) }}">Lista Atividades</a></li>
+            <li><a class="" href="{{ url('cadastroAtividade') }}">Cadastro Atividade</a></li>
+        </ul>
+    </div>
+</div>
+
+{% for alert in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    <strong>Sucesso!</strong> {{alert}}
+</div>
+{% endfor %}
+{% for alert in app.session.flashbag.get('info') %}
+<div class="alert alert-info">
+    <strong>Informativo!</strong> alert
+</div>
+{% endfor %}
+{% for alert in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    <strong>Cuidado!</strong> {{alert}}
+</div>
+{% endfor %}
+{% for alert in app.session.flashbag.get('danger') %}
+<div class="alert alert-danger">
+    <strong>Perigo!</strong> {{alert}}
+</div>
+{% endfor %}
+
+{% block body %}
+{% endblock %}
+{% block modal %}
+{% endblock %}
+</body>
+<!-- JavaScripts -->
+<script type="application/javascript" src="http://{{ app.request_context.host }}/bower_components/jquery/dist/jquery.js"></script>
+<script type="application/javascript" src="http://{{ app.request_context.host }}/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script type="application/javascript" src="http://{{ app.request_context.host }}/bower_components/bootbox.js/bootbox.js"></script>
+{% block javascript %}{% endblock javascript %}
+</html>
